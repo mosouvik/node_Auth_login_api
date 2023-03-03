@@ -50,8 +50,36 @@ const register_user=async(req,res)=>{
  
 }
 
+const user_login=async(req,res)=>{
+    try {
+        // Get user input
+        const { email, password } = req.body;
+
+        // Validate user input
+        if (!(email && password)) {
+           return res.status(400).json("All input is required");
+        }
+        // Validate if user exist in our database
+        const user = await User.findOne({ email });
+
+        if (user && (await bcryptjs.compare(password, user.password))) {
+            // Create token
+            const tokendata = await CreateToken(user._id)
+            // user
+              res.status(200).json({ success:true,"user": user, "token": tokendata });
+        }
+         res.status(400).json({success:false,message:"Invalid Credentials"});
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+const test=(req,res)=>{
+    res.send({message:"you are Authenticated User"});
+
+}
 
 
 module.exports={
-    register_user
+    register_user,user_login,test
 }

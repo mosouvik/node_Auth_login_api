@@ -33,12 +33,12 @@ const upload = multer({ storage: storage });
 
 //define controller
 const user_controller = require('../controller/UserController');
-//const auth = require('../middleware/auth')
+const auth = require('../middleware/auth')
 
 //define url route
 user_route.post('/register', upload.single('image'), user_controller.register_user);
-//user_route.post('/login', user_controller.user_login);
-//user_route.get('/test', auth, user_controller.test);
+user_route.post('/login', user_controller.user_login);
+user_route.get('/test',auth, user_controller.test);
 
 //update password route
 //user_route.post('/update-password', auth, user_controller.update_password);
